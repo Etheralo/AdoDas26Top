@@ -1,0 +1,78 @@
+paths:
+  feature_root: /root/autodl-tmp/dataset-ai/features
+  manifest_dir: /root/autodl-tmp/dataset-ai
+  text_root: null
+  output_dir: /root/autodl-tmp/adodas_sota/outputs
+features:
+  audio:
+  - mel_mfcc
+  - vad
+  - ssl_embed
+  audio_pooled:
+  - egemaps
+  video:
+  - headpose_geom
+  - face_behavior
+  - qc_stats
+  - vad_agg
+  - body_pose
+  - global_motion
+  - vision_ssl_embed
+  audio_ssl_tag: chinese-hubert-large
+  video_ssl_tag: dinov2-large
+  text_tag: chinese-roberta-wwm-ext-large
+  text_sessions:
+  - B01
+  - B02
+  - B03
+  max_text_tokens: 256
+  mask_policy: and_core
+  core_audio:
+  - mel_mfcc
+  - ssl_embed
+  core_video:
+  - vision_ssl_embed
+  - qc_stats
+  max_frames: 1500
+  eval_max_frames: 4500
+split:
+  inner_dev_ratio: 0.1
+  seed: 2026
+  final: false
+  require_official_val: false
+model:
+  d_model: 192
+  conformer_layers: 4
+  downsample: 2
+  use_cross_modal: true
+  cross_modal_layers: 2
+  use_text: false
+  cross_session_layers: 2
+  a2_head: query_coral
+  use_a1_guidance: true
+  dropout: 0.1
+  modality_drop_prob: 0.1
+loss:
+  a1_weight: 1.0
+  a2_weight: 1.0
+  session_aux_weight: 0.2
+  subscale_weight: 0.1
+  a2_pos_weight_cap: 4.0
+train:
+  stage: 1
+  batch_size: 40
+  lr: 0.0005
+  weight_decay: 0.05
+  epochs: 40
+  warmup_epochs: 2
+  patience: 8
+  amp: true
+  num_workers: 16
+  preload: false
+  seed: 42
+  session_drop_prob: 0.1
+  eval_batch_size: 8
+  grad_accum_steps: 1
+  prefetch_factor: 1
+  strict_data: true
+  require_cuda: true

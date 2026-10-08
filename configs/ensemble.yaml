@@ -1,0 +1,11 @@
+# Ensemble of finished runs (each must have predictions/ from train.py or infer.py
+# and all must share the same inner-dev split, i.e. the same split.seed / ratio).
+name: ensemble
+output_dir: outputs
+members:
+  - outputs/runs/<stage2_run_seed42>
+  - outputs/runs/<stage2_run_seed43>
+  - outputs/runs/<stage2_run_seed44>
+a2:
+  expert_selection: true   # per-item choice among members and their mean
+  min_gain: 0.005          # an expert must beat the mean ensemble by this inner-dev QWK

@@ -1,0 +1,51 @@
+# Paper Table 3 inspired profile; unpublished choices are documented in METHOD_ALIGNMENT.md.
+paths:
+  feature_root: /root/autodl-tmp/dataset-ai/features
+  manifest_dir: /root/autodl-tmp/dataset-ai
+  output_dir: /root/autodl-tmp/adodas_sota/outputs/aligned
+  text_root: null
+features:
+  max_frames: 1500
+  eval_max_frames: 4500
+split:
+  development_source: official_val
+  inner_dev_ratio: 0.1
+  seed: 2026
+  final: false
+  require_official_val: true
+train:
+  stage: 1
+  init_checkpoint: null
+  batch_size: 36
+  eval_batch_size: 8
+  grad_accum_steps: 1
+  worker_batch_size: 4
+  num_workers: 8
+  prefetch_factor: 1
+  require_cuda: true
+  gpu_memory_limit_gib: 30.0
+  lr: 0.0001
+  weight_decay: 0.01
+  epochs: 40
+  warmup_epochs: 4
+  min_epochs: 8
+  patience: 8
+  seed: 42
+  session_drop_prob: 0.0
+  selection_metric: calibrated
+  selection_task: a2
+loss:
+  session_aux_weight: 0.0
+  subscale_weight: 0.0
+  a1_weight: 0.0
+  a2_weight: 1.0
+model:
+  d_model: 192
+  dropout: 0.1
+  modality_drop_prob: 0.0
+  cross_session_layers: 2
+  use_text: false
+  conformer_layers: 4
+  use_cross_modal: false
+  a2_head: query_coral
+  use_a1_guidance: false

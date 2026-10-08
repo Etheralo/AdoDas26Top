@@ -1,0 +1,27 @@
+# Stage 2: freeze the stage-1 encoder and re-fit only the task heads
+# (A1 head, query CORAL head, A1-guided correction).
+# model / features / split are taken from the stage-1 checkpoint automatically.
+#   python train.py --config configs/stage2.yaml \
+#       --set train.init_checkpoint=outputs/runs/<stage1_run>/checkpoints/best_a1.pt
+
+paths:
+  feature_root: /path/to/AdoDAS/features
+  manifest_dir: /path/to/AdoDAS/manifests
+  text_root: null
+  output_dir: outputs
+
+loss:
+  session_aux_weight: 0.0   # aux heads are frozen in stage 2
+
+train:
+  stage: 2
+  init_checkpoint: null
+  batch_size: 32
+  lr: 1.0e-4
+  weight_decay: 0.01
+  epochs: 12
+  warmup_epochs: 0
+  min_epochs: 3
+  patience: 4
+  session_drop_prob: 0.1
+  seed: 42

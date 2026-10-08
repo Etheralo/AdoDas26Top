@@ -1,0 +1,63 @@
+# Stage 1: end-to-end joint A1 + A2 training.
+# Only the values that differ from training/config.py DEFAULTS need to be here;
+# they are all listed so the run is fully described by this file.
+
+paths:
+  feature_root: /path/to/AdoDAS/features      # contains train/ val/ test_hidden/
+  manifest_dir: /path/to/AdoDAS/manifests     # train.csv val.csv test_hidden.csv
+  text_root: null                             # set after tools/extract_text_embeddings.py
+  output_dir: outputs
+
+features:
+  audio: [mel_mfcc, vad, ssl_embed]
+  audio_pooled: [egemaps]
+  video: [headpose_geom, face_behavior, qc_stats, vad_agg, body_pose, global_motion, vision_ssl_embed]
+  audio_ssl_tag: chinese-hubert-large
+  video_ssl_tag: dinov2-large
+  text_tag: chinese-roberta-wwm-ext-large
+  text_sessions: [B01, B02, B03]
+  max_text_tokens: 256
+  mask_policy: and_core
+  core_audio: [mel_mfcc, ssl_embed]
+  core_video: [vision_ssl_embed, qc_stats]
+  max_frames: 1500          # training crop at 25 Hz (60 s)
+  eval_max_frames: 4500     # centre crop at evaluation (180 s)
+
+split:
+  inner_dev_ratio: 0.1
+  seed: 2026
+  final: false              # true = also train on official val (for the final submission)
+
+model:
+  d_model: 192
+  conformer_layers: 4
+  downsample: 2
+  use_cross_modal: true
+  cross_modal_layers: 2
+  use_text: false           # switch on once text embeddings exist
+  cross_session_layers: 2
+  a2_head: query_coral
+  use_a1_guidance: true
+  dropout: 0.1
+  modality_drop_prob: 0.1
+
+loss:
+  a1_weight: 1.0
+  a2_weight: 1.0
+  session_aux_weight: 0.2
+  subscale_weight: 0.1
+  a2_pos_weight_cap: 4.0
+
+train:
+  stage: 1
+  batch_size: 16
+  lr: 5.0e-4
+  weight_decay: 0.05
+  epochs: 40
+  warmup_epochs: 2
+  patience: 8
+  amp: true
+  num_workers: 4
+  preload: false
+  seed: 42
+  session_drop_prob: 0.1

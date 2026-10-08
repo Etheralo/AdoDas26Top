@@ -1,0 +1,22 @@
+name: adodas_train
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.10
+  - pip
+  - numpy=1.26
+  - pandas=2.2
+  - scikit-learn=1.5
+  - pyyaml=6.0
+  - tqdm=4.67
+  - pip:
+      # CUDA is not pinned by the organizer; this server spec selects cu128.
+      - --index-url https://download.pytorch.org/whl/cu128
+      - --extra-index-url https://pypi.org/simple
+      - torch==2.10.0
+      # The PyPI wheel avoids the conda libarrow/system libstdc++ import-order conflict.
+      - pyarrow==16.1.0
+      # Only needed for tools/extract_text_embeddings.py
+      # Install text-only dependency separately from PyPI when enabling text:
+      # python -m pip install transformers==4.46.3

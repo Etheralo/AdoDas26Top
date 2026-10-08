@@ -1,0 +1,25 @@
+paths:
+  feature_root: /root/autodl-tmp/dataset-ai/features
+  manifest_dir: /root/autodl-tmp/dataset-ai
+  text_root: null
+  output_dir: /root/autodl-tmp/adodas_sota/outputs
+loss:
+  session_aux_weight: 0.0
+train:
+  stage: 2
+  init_checkpoint: null
+  batch_size: 2
+  lr: 0.0001
+  weight_decay: 0.01
+  epochs: 12
+  warmup_epochs: 0
+  min_epochs: 3
+  patience: 4
+  session_drop_prob: 0.1
+  seed: 42
+  eval_batch_size: 1
+  grad_accum_steps: 8
+  num_workers: 0
+  prefetch_factor: 1
+  strict_data: true
+  require_cuda: true
